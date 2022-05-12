@@ -14,11 +14,9 @@ module.exports.Sheet = class {
     }
     async setup(keyFilePath) {
         this.auth = new google.auth.GoogleAuth({
-            keyFile: path.join(__dirname + '/../', keyFilePath),
+            keyFile: path.join(__dirname + '/../../../', keyFilePath),
             scopes: "https://www.googleapis.com/auth/spreadsheets"
-        }).catch(err => {
-            throw err;
-        });
+        })
         this.client = await this.auth.getClient();
         this.sheets = await google.sheets({ version: 'v4', auth: this.client });
         return true;
