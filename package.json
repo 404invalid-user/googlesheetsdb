@@ -1,6 +1,6 @@
 {
   "name": "googlesheetsdb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "get and add data to google sheets easily using objects ",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/404invalid-user/googlesheetsdb.git"
   },
-  "author": "404invalid-user",
+  "author": "404invalid-user (https://invaliduser.xyz)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/404invalid-user/googlesheetsdb/issues"
