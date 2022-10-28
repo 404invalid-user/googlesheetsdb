@@ -1,6 +1,6 @@
 # google sheetsdatabase
 ## get and add data to google sheets easily using objects 
- ![version](https://img.shields.io/badge/version-1.0.0-green) 
+ ![version](https://img.shields.io/badge/version-1.0.1-green) 
  googlesheetsdb is a package for the [googleapis](https://www.npmjs.com/package/googleapis) package that makes it more like the [mongoose](https://www.npmjs.com/package/mongoose) package when getting and adding data.
 
 
