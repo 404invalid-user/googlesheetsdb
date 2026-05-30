@@ -2,9 +2,9 @@
   "name": "googlesheetsdb",
   "version": "1.0.1",
   "description": "get and add data to google sheets easily using objects ",
-  "main": "index.js",
+ "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "build": "npx tsc"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,13 @@
     "googleapis",
     "mongoose",
     "googlesheets"
-  ]
+  ],
+  "dependencies": {
+    "googleapis": "^171.4.0"
+  },
+   "devDependencies": {
+    "@types/node": "^25.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }

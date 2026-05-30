@@ -34,7 +34,7 @@ example
 ```js
 const Googlesheetsdb = require('@404invalid-user/googlesheetsdb');
 const sheet = new Googlesheetsdb.Sheet('1aFHYCF_2QyzSRQDyICWy--CWOXbbvDr7SwY4uJWcMoM', 'Sheet1');
-sheet.setup('./tokens.json');
+sheet.setup('/opt/secrets/tokens.json');
 
 async function GetPerson() {
   const person = await sheet.getbyid('1');
@@ -50,7 +50,7 @@ example
 ```js
 const Googlesheetsdb = require('@404invalid-user/googlesheetsdb');
 const sheet = new Googlesheetsdb.Sheet('1aFHYCF_2QyzSRQDyICWy--CWOXbbvDr7SwY4uJWcMoM', 'Sheet1');
-sheet.setup('./tokens.json');
+sheet.setup('/opt/secrets/tokens.json');
 
 async function UpdateAge() {
   const person = await sheet.getbyid('1');
@@ -72,7 +72,7 @@ example
 ```js
 const Googlesheetsdb = require('@404invalid-user/googlesheetsdb');
 const sheet = new Googlesheetsdb.Sheet('1aFHYCF_2QyzSRQDyICWy--CWOXbbvDr7SwY4uJWcMoM', 'Sheet1');
-sheet.setup('./tokens.json');
+sheet.setup('/opt/secrets/tokens.json');
 
 async function GetPeople() {
   const people = await sheet.getall();
@@ -91,7 +91,7 @@ example
 ```js
 const Googlesheetsdb = require('@404invalid-user/googlesheetsdb');
 const sheet = new Googlesheetsdb.Sheet('1aFHYCF_2QyzSRQDyICWy--CWOXbbvDr7SwY4uJWcMoM', 'Sheet1');
-sheet.setup('./tokens.json');
+sheet.setup('/opt/secrets/tokens.json');
 
 async function NewPerson() {
   const jon = {id: '4', name: 'jon', age: 23};
@@ -108,7 +108,8 @@ NewPerson();
 - [x] .save()
 - [x] .create()
 - [ ] .find()
-- [ ] .findOne()
+- [x] .findById()
+- [x] .getAll()
 
 ## help and support
 you can join my discord server [https://discord.gg/RYQbmj7](https://discord.gg/RYQbmj7) or email me `user (at) invalidlag.com`
