@@ -1,6 +1,6 @@
 {
   "name": "googlesheetsdb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "get and add data to google sheets easily using objects ",
   "main": "index.js",
   "scripts": {
