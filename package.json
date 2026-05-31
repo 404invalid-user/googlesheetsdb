@@ -1,5 +1,5 @@
 {
-  "name": "googlesheetsdb",
+  "name": "@404invalid-user/googlesheetsdb",
   "version": "3.0.0",
   "description": "get and add data to google sheets easily using objects",
  "main": "dist/index.js",
