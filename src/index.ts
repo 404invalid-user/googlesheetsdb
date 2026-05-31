@@ -1,6 +1,7 @@
 import { google, sheets_v4 } from 'googleapis';
 import { GoogleAuth, AuthClient } from 'google-auth-library';
 import path from 'path';
+import fs from 'fs';
 
 
 interface SheetData {
@@ -8,8 +9,38 @@ interface SheetData {
   save?: () => Promise<boolean>;
 }
 
-class Sheet {
-  // 1. Declare specific types for your properties
+
+function ConstructSave(sheets: sheets_v4.Sheets | null, page: string, spreadsheetId: string, rowLine: number, rowNames: string[], res: SheetData): () => Promise<boolean> {
+  return async function Save() {
+    if (!sheets) {
+      throw new Error("Could not save: Sheets API not initialized. this should never happen :/");
+    }
+    if (!spreadsheetId || !page) {
+      throw new Error("Could not save: Missing spreadsheetId or page information. this should never happen :/");
+    }
+
+    const saveRes: any[] = [];
+    for (let i = 0; i < rowNames.length; i++) {
+      saveRes.push(res[rowNames[i]]);
+    }
+
+    try {
+      const l = await sheets.spreadsheets.values.update({
+        spreadsheetId: spreadsheetId,
+        range: page + '!A' + (rowLine + 1).toString(),
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [saveRes]
+        }
+      });
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
+
+class SheetDB {
   private authManager: GoogleAuth | null = null;
   private client: AuthClient | null = null;
   private sheets: sheets_v4.Sheets | null = null;
@@ -26,8 +57,11 @@ class Sheet {
 
   async setup(keyFilePath: string): Promise<void> {
     const normalizedPath = path.normalize(keyFilePath);
-    if (path.isAbsolute(normalizedPath)) {
-      throw new Error('Invalid key file path. Use direct root paths only.');
+    if (!path.isAbsolute(normalizedPath)) {
+      throw new Error('Invalid key file path. Path must be absolute.');
+    }
+    if (!fs.existsSync(normalizedPath)) {
+      throw new Error('Key file does not exist at path: ' + normalizedPath);
     }
 
     this.authManager = new google.auth.GoogleAuth({
@@ -73,7 +107,7 @@ class Sheet {
       }
     }
     if (idLine == null) {
-      throw "No row is named "+idLine;
+      throw "No row is named " + idLine;
     }
     for (let i = 0; i < rawDataBase.length; i++) {
       if (i <= 0) continue;
@@ -86,36 +120,13 @@ class Sheet {
       }
     }
     if (res !== null) {
-      const passToSave = this;
-      res['save'] = async function (): Promise<boolean> {
-        if (!passToSave.sheets || !passToSave.authManager) {
-          throw new Error("Could not save: Sheets API not initialized. this should never happen :/");
-        }
-
-        const saveRes: any[] = [];
-        for (let i = 0; i < rowNames.length; i++) {
-          saveRes.push(res[rowNames[i]]);
-        }
-
-        try {
-          const l = await passToSave.sheets.spreadsheets.values.update({
-            spreadsheetId: passToSave.spreadsheetId,
-            range: passToSave.page + '!A' + (rowLine + 1).toString(),
-            valueInputOption: 'USER_ENTERED',
-            requestBody: {
-              values: [saveRes]
-            }
-          });
-          return true;
-        } catch (error) {
-          throw error;
-        }
-      }
+      res['save'] = ConstructSave(this.sheets, this.page, this.spreadsheetId, rowLine, rowNames, res);
     }
     return res;
   }
 
   async create(data: SheetData): Promise<boolean> {
+    data.save = undefined;
     const res: any[] = [];
     if (!this.sheets || !this.authManager) {
       throw new Error("Sheets API not initialized. Call setup() first.");
@@ -146,14 +157,14 @@ class Sheet {
 
   async getAll() {
     let returnData: any[] = [];
-      if (!this.sheets || !this.authManager) {
+    if (!this.sheets || !this.authManager) {
       throw new Error("Sheets API not initialized. Call setup() first.");
     }
     const getRows = await this.sheets.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
       range: this.page
     })
-    const rawDataBase = getRows.data.values??[];
+    const rawDataBase = getRows.data.values ?? [];
     const rowNames = rawDataBase[0];
 
     for (let i = 0; i < rawDataBase.length; i++) {
@@ -169,4 +180,4 @@ class Sheet {
   }
 }
 
-export default Sheet;
+export default SheetDB;
